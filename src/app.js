@@ -8,12 +8,11 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/', (req, res, next) => {
-    res.status(200).send({
-        title: "nodejs-api-login",
-        version: "1.0.0"
-    })
-});
+//import routes
+const indexRoute = require('./routes/indexRoute');
+
+//creating routes
+app.use('/', indexRoute);
 
 require('./app/controllers/index')(app);
 
