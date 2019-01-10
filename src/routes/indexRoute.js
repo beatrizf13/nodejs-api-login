@@ -3,7 +3,7 @@ const router = express.Router();
 
 const route = router.get('/', (req, res, next) => {
     res.status(200).send({
-        title: "nodejs-api-login",
+        title: "nodejs-api-tasks",
         version: "1.0.0"
     })
 });

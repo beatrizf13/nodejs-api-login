@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-api-login",
+  "name": "nodejs-api-tasks",
   "version": "1.0.0",
   "main": "bin/www",
   "scripts": {
