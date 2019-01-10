@@ -14,10 +14,14 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "fs": "^0.0.1-security",
     "http-errors": "~1.6.2",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.3",
     "morgan": "~1.9.0",
-    "nodemon": "^1.18.9"
+    "nodemailer": "^5.1.1",
+    "nodemailer-express-handlebars": "^3.0.0",
+    "nodemon": "^1.18.9",
+    "path": "^0.12.7"
   }
 }
