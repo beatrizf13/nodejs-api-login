@@ -1,10 +1,9 @@
 const express = require('express');
-const authMiddleware = require('../middlewares/auth');
+const router = express.Router();
 
 const Project = require('../models/project');
 const Task = require('../models/task');
-
-const router = express.Router();
+const authMiddleware = require('../middlewares/auth');
 
 router.use(authMiddleware);
 
@@ -56,10 +55,7 @@ router.put('/:projectId', async (req, res) => {
   try {
     const { title, description, tasks } = req.body;
 
-    const project = await Project.findByIdAndUpdate(req.params.projectId, {
-      title,
-      description
-    }, { new: true });
+    const project = await Project.findByIdAndUpdate(req.params.projectId, { title, description }, { new: true });
 
     project.tasks = [];
     await Task.remove({ project: project._id });
@@ -75,6 +71,7 @@ router.put('/:projectId', async (req, res) => {
     await project.save();
 
     return res.send({ project });
+
   } catch (err) {
     return res.status(400).send({ message: "error -> " + err });
   }
@@ -85,6 +82,7 @@ router.delete('/:projectId', async (req, res) => {
     await Project.findByIdAndRemove(req.params.projectId);
 
     return res.send();
+
   } catch (err) {
     return res.status(400).send({ message: "error -> " + err });
   }

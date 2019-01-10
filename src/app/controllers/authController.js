@@ -2,18 +2,14 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const mailer = require('../../modules/mailer');
-
-const authConfig = require('../../config/auth');
-
-const User = require('../models/user');
-
 const router = express.Router();
 
+const mailer = require('../../modules/mailer');
+const authConfig = require('../../config/auth');
+const User = require('../models/user');
+
 function generateToken(params = {}) {
-    return jwt.sign(params , authConfig.secret, {
-        expiresIn: 86400, 
-     });
+    return jwt.sign(params , authConfig.secret, { expiresIn: 86400 });
 }
 
 router.post('/register', async (req, res) => {
@@ -21,19 +17,14 @@ router.post('/register', async (req, res) => {
 
     try {
         if (await User.findOne({ email })){
-            return res.status(400).send({
-                message : 'error: user already exists'
-            });
+            return res.status(400).send({ message : 'error: user already exists' });
         }
 
         const user = await User.create(req.body);
 
         user.password = undefined;
 
-        return res.send({
-            user,
-            token: generateToken({ id: user.id }),
-        });
+        return res.send({ user, token: generateToken( { id: user.id }) });
 
     } catch (err) {
         return res.status(400).send({ message: "error -> " + err });
@@ -47,32 +38,22 @@ router.post('/authenticate', async (req, res) => {
     const user = await User.findOne({ email }).select('+password');
 
     if (!user){
-        return res.status(400).send({
-            message: 'error: user not found'
-        });
+        return res.status(400).send({ message: 'error: user not found' });
     }
 
     if (!await bcrypt.compare(password, user.password)){
-        return res.status(400).send({
-            message: 'error: invalid password'
-        });
+        return res.status(400).send({ message: 'error: invalid password' });
     }
 
     user.password = undefined;
 
-    const token = jwt.sign({ id: user.id }, authConfig.secret, {
-       expiresIn: 86400, 
-    });
+    const token = jwt.sign({ id: user.id }, authConfig.secret, { expiresIn: 86400 });
 
-    res.send({ 
-        user,
-        token: generateToken({ id: user.id }), 
-    });
+    res.send({ user, token: generateToken( { id: user.id }) });
     
   } catch (err){
     return res.status(400).send({ message: "error -> " + err });
   }
-
 });
 
 router.post('/forgot-password', async (req, res) => {
@@ -101,6 +82,7 @@ router.post('/forgot-password', async (req, res) => {
         from: 'diego@rocketseat.com.br',
         template: 'auth/forgot-password',
         context: { token },
+
       }, (err) => {
         if (err)
           return res.status(400).send({ message: 'error: cannot send forgot password email' });
@@ -135,6 +117,7 @@ router.post('/forgot-password', async (req, res) => {
       await user.save();
   
       res.send({ update: true });
+
     } catch (err) {
       res.status(400).send({ message: 'error: ' + err });
     }
