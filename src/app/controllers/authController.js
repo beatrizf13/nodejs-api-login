@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
     try {
         if (await User.findOne({ email })){
             return res.status(400).send({
-                error : 'user already exists'
+                message : 'error: user already exists'
             });
         }
 
@@ -36,26 +36,25 @@ router.post('/register', async (req, res) => {
         });
 
     } catch (err) {
-        return res.status(400).send({
-            error : err
-        });
+        return res.status(400).send({ message: "error -> " + err });
     }
 });
 
 router.post('/authenticate', async (req, res) => {
+  try{
     const { email, password } = req.body;
 
     const user = await User.findOne({ email }).select('+password');
 
     if (!user){
         return res.status(400).send({
-            error: 'user not found'
+            message: 'error: user not found'
         });
     }
 
     if (!await bcrypt.compare(password, user.password)){
         return res.status(400).send({
-            error: 'invalid password'
+            message: 'error: invalid password'
         });
     }
 
@@ -69,6 +68,10 @@ router.post('/authenticate', async (req, res) => {
         user,
         token: generateToken({ id: user.id }), 
     });
+    
+  } catch (err){
+    return res.status(400).send({ message: "error -> " + err });
+  }
 
 });
 
@@ -79,7 +82,7 @@ router.post('/forgot-password', async (req, res) => {
       const user = await User.findOne({ email });
   
       if (!user)
-        return res.status(400).send({ error: 'user not found' });
+        return res.status(400).send({ message: 'error: user not found' });
   
       const token = crypto.randomBytes(20).toString('hex');
   
@@ -100,12 +103,12 @@ router.post('/forgot-password', async (req, res) => {
         context: { token },
       }, (err) => {
         if (err)
-          return res.status(400).send({ error: 'cannot send forgot password email' });
+          return res.status(400).send({ message: 'error: cannot send forgot password email' });
   
         return res.send({ send: true });
       })
     } catch (err) {
-      res.status(400).send({ error: 'error on forgot password, try again' });
+      res.status(400).send({ message: 'error: ' + err });
     }
   });
   
@@ -117,15 +120,15 @@ router.post('/forgot-password', async (req, res) => {
         .select('+passwordResetToken passwordResetExpires');
   
       if (!user)
-        return res.status(400).send({ error: 'user not found' });
+        return res.status(400).send({ message: 'error: user not found' });
   
       if (token !== user.passwordResetToken)
-        return res.status(400).send({ error: 'token invalid' });
+        return res.status(400).send({ message: 'error: token invalid' });
   
       const now = new Date();
   
       if (now > user.passwordResetExpires)
-        return res.status(400).send({ error: 'token expired, generate a new one' });
+        return res.status(400).send({ message: 'error: token expired, generate a new one' });
   
       user.password = password;
   
@@ -133,7 +136,7 @@ router.post('/forgot-password', async (req, res) => {
   
       res.send({ update: true });
     } catch (err) {
-      res.status(400).send({ error: 'cannot reset password, try again' });
+      res.status(400).send({ message: 'error: ' + err });
     }
   });
 

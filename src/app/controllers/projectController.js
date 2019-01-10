@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     return res.send({ projects });
 
   } catch (err) {
-    return res.status(400).send({ error: err });
+    return res.status(400).send({ message: "error -> " + err });
   }
 });
 
@@ -25,7 +25,7 @@ router.get('/:projectId', async (req, res) => {
 
     return res.send({ project });
   } catch (err) {
-    return res.status(400).send({ error: 'Error loading project' });
+    return res.status(400).send({ message: "error -> " + err });
   }
 });
 
@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
     return res.send({ project });
 
   } catch (err) {
-    return res.status(400).send({ error: err });
+    return res.status(400).send({ message: "error -> " + err });
   }
 });
 
@@ -76,7 +76,7 @@ router.put('/:projectId', async (req, res) => {
 
     return res.send({ project });
   } catch (err) {
-    return res.status(400).send({ error: err });
+    return res.status(400).send({ message: "error -> " + err });
   }
 });
 
@@ -86,7 +86,7 @@ router.delete('/:projectId', async (req, res) => {
 
     return res.send();
   } catch (err) {
-    return res.status(400).send({ error: err });
+    return res.status(400).send({ message: "error -> " + err });
   }
 });
 
