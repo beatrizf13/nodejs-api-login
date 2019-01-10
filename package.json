@@ -1,9 +1,9 @@
 {
   "name": "nodejs-api-login",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "bin/www",
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node bin/www",
     "dev": "nodemon"
   },
   "keywords": [],
@@ -22,6 +22,8 @@
     "nodemailer": "^5.1.1",
     "nodemailer-express-handlebars": "^3.0.0",
     "nodemon": "^1.18.9",
-    "path": "^0.12.7"
+    "npm": "^6.5.0",
+    "path": "^0.12.7",
+    "sendgrid": "^2.0.0"
   }
 }
