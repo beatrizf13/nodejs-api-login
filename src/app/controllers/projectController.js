@@ -1,13 +1,8 @@
 const express = require('express');
-const router = express.Router();
+const Project = require('../models/projectModel');
+const Task = require('../models/taskModel');
 
-const Project = require('../models/project');
-const Task = require('../models/task');
-const authMiddleware = require('../middlewares/auth');
-
-router.use(authMiddleware);
-
-router.get('/', async (req, res) => {
+exports.get = async (req, res) => {
   try {
     const projects = await Project.find().populate(['user', 'tasks']);
 
@@ -16,9 +11,9 @@ router.get('/', async (req, res) => {
   } catch (err) {
     return res.status(400).send({ message: "error -> " + err });
   }
-});
+}
 
-router.get('/:projectId', async (req, res) => {
+exports.getById = async (req, res) => {
   try {
     const project = await Project.findById(req.params.projectId).populate(['user', 'tasks']);
 
@@ -26,9 +21,9 @@ router.get('/:projectId', async (req, res) => {
   } catch (err) {
     return res.status(400).send({ message: "error -> " + err });
   }
-});
+}
 
-router.post('/', async (req, res) => {
+exports.post = async (req, res) => {
   try {
     const { title, description, tasks } = req.body;
 
@@ -49,9 +44,9 @@ router.post('/', async (req, res) => {
   } catch (err) {
     return res.status(400).send({ message: "error -> " + err });
   }
-});
+}
 
-router.put('/:projectId', async (req, res) => {
+exports.put = async (req, res) => {
   try {
     const { title, description, tasks } = req.body;
 
@@ -75,9 +70,9 @@ router.put('/:projectId', async (req, res) => {
   } catch (err) {
     return res.status(400).send({ message: "error -> " + err });
   }
-});
+}
 
-router.delete('/:projectId', async (req, res) => {
+exports.delete = async (req, res) => {
   try {
     await Project.findByIdAndRemove(req.params.projectId);
 
@@ -86,6 +81,6 @@ router.delete('/:projectId', async (req, res) => {
   } catch (err) {
     return res.status(400).send({ message: "error -> " + err });
   }
-});
+}
 
-module.exports = app => app.use('/projects', router);
+//module.exports = app => app.use('/projects', router);

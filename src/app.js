@@ -10,11 +10,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //import routes
 const indexRoute = require('./routes/indexRoute');
+const userRouther = require('./routes/userRoute');
+const projectRoute = require('./routes/projectRoute');
+const taskRoute = require('./routes/taskRoute');
 
 //creating routes
 app.use('/', indexRoute);
+app.use('/users', userRouther);
+app.use('/projects', projectRoute);
+app.use('/tasks', taskRoute);
 
-require('./app/controllers/index')(app);
+
+//require('./app/controllers/index');
 
 //enables CORS
 app.use(function (req, res, next) {

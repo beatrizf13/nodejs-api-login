@@ -1,13 +1,8 @@
 const express = require('express');
-const router = express.Router();
+const Project = require('../models/projectModel');
+const Task = require('../models/taskModel');
 
-const Project = require('../models/project');
-const Task = require('../models/task');
-const authMiddleware = require('../middlewares/auth');
-
-router.use(authMiddleware);
-
-router.get('/', async (req, res) => {
+exports.get = async (req, res) => {
     try {
       const tasks = await Task.find();
   
@@ -16,9 +11,9 @@ router.get('/', async (req, res) => {
     } catch (err) {
       return res.status(400).send({ message: "error -> " + err });
     }
-});
+}
 
-router.get('/done', async (req, res) => {
+exports.getDones = async (req, res) => {
     try {
       const tasks = await Task.find({
           completed: true
@@ -29,9 +24,9 @@ router.get('/done', async (req, res) => {
     } catch (err) {
       return res.status(400).send({ message: "error -> " + err });
     }
-});
+}
 
-router.get('/not-done', async (req, res) => {
+exports.getNotDones = async (req, res) => {
     try {
       const tasks = await Task.find({
           completed: false
@@ -42,9 +37,9 @@ router.get('/not-done', async (req, res) => {
     } catch (err) {
       return res.status(400).send({ message: "error -> " + err });
     }
-});
+}
 
-router.get('/:projectId', async (req, res) => {
+exports.getById = async (req, res) => {
     try {
         const project = await Project.findById(req.params.projectId);
 
@@ -53,9 +48,9 @@ router.get('/:projectId', async (req, res) => {
     } catch (err) {
         return res.status(400).send({ message: "error -> " + err });
     }
-});
+}
 
-router.post('/', async (req, res) => {
+exports.post = async (req, res) => {
     try {
       const { title, projectId } = req.body;
   
@@ -74,9 +69,9 @@ router.post('/', async (req, res) => {
     } catch (err) {
         return res.status(400).send({ message: "error -> " + err });
     }
-});
+}
 
-router.put('/done/:taskId', async (req, res) => {
+exports.markDone = async (req, res) => {
     try {
       const task = await Task.findByIdAndUpdate(req.params.taskId, { completed: true }, { new: true })
 
@@ -88,9 +83,9 @@ router.put('/done/:taskId', async (req, res) => {
     } catch (err) {
         return res.status(400).send({ message: "error -> " + err });
     }
-});
+}
 
-router.put('/not-done/:taskId', async (req, res) => {
+exports.markNotDone = async (req, res) => {
     try {
       const task = await Task.findByIdAndUpdate(req.params.taskId, { completed: false }, { new: true })
 
@@ -102,9 +97,9 @@ router.put('/not-done/:taskId', async (req, res) => {
     } catch (err) {
         return res.status(400).send({ message: "error -> " + err });
     }
-});
+}
 
-router.put('/:taskId', async (req, res) => {
+exports.put = async (req, res) => {
     try {
       const { title } = req.body;
   
@@ -118,9 +113,9 @@ router.put('/:taskId', async (req, res) => {
     } catch (err) {
         return res.status(400).send({ message: "error -> " + err });
     }
-});
+}
 
-router.delete('/:taskId', async (req, res) => {
+exports.delete = async (req, res) => {
     try {
         await Task.findByIdAndRemove(req.params.taskId);
         return res.send();
@@ -128,7 +123,4 @@ router.delete('/:taskId', async (req, res) => {
     } catch (err) {
         return res.status(400).send({ message: "error -> " + err });
     }
-});
-  
-
-module.exports = app => app.use('/tasks', router);
+}
