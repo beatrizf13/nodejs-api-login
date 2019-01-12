@@ -88,7 +88,7 @@ exports.forgotPassword = async (req, res) => {
     
     mailer.sendMail({
       to: email,
-      from: 'diego@rocketseat.com.br',
+      from: 'beatrizf13@beatrizf13.com.br',
       template: 'auth/forgot-password',
       context: { token }
     }, (err) => {

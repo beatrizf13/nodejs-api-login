@@ -82,5 +82,3 @@ exports.delete = async (req, res) => {
     return res.status(400).send({ message: "error -> " + err });
   }
 }
-
-//module.exports = app => app.use('/projects', router);
